@@ -74,7 +74,7 @@ async def process_qr(update: Update, context: CallbackContext):
         file = await context.bot.get_file(file_id)
         if not os.path.exists(SAVE_FOLDER):
             os.makedirs(SAVE_FOLDER, exist_ok=True)
-        file_name = f"qr_{message.message_id}.jpg"
+        file_name = f"{MEMU_VM_NAME}_{message.message_id}.jpg"
         file_path = os.path.join(SAVE_FOLDER, file_name)
         await file.download_to_drive(file_path)
     except Exception as e:
@@ -115,7 +115,7 @@ async def process_qr(update: Update, context: CallbackContext):
 def main():
     print("Перед запуском настройте файл settings.py!!!\nСкрипт запущен")
     app = Application.builder().token(BOT_TOKEN).build()
-    app.add_handler(MessageHandler(filters.PHOTO & ~filters.FORWARDED, process_qr))
+    app.add_handler(MessageHandler(filters.PHOTO, process_qr))
     app.run_polling()
 
 
