@@ -4,7 +4,6 @@ import cv2
 from pyzbar.pyzbar import decode
 from telegram import Update, Bot
 from telegram.ext import Application, MessageHandler, filters, CallbackContext
-from pymemuc import PyMemuc
 from settings import *
 from banks import tinkoff_bank, ozon_bank, yandex_bank
 
@@ -123,7 +122,7 @@ def main():
     app.run_polling()
 
 
-if __name__ == "main":
+if __name__ == "__main__":
     main()
 
     # print(connect_memu(os.path.join(SAVE_FOLDER, f"qr_124.jpg")))
