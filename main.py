@@ -125,5 +125,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-    # print(connect_memu(os.path.join(SAVE_FOLDER, f"qr_124.jpg")))
+    # print(connect_memu(SAVE_FOLDER, f"qr_124.jpg"))
     # tinkoff_bank("127.0.0.1:21503")
