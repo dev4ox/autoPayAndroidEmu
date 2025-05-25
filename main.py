@@ -51,12 +51,19 @@ def connect_memu(file_path: str, file_name: str) -> str:
         subprocess.run([ADB_PATH, "-s", adb_id, "shell", "mkdir", f"/sdcard/Pictures/QR-code"], check=True)
     except subprocess.CalledProcessError as e:
         pass
+
     try:
         subprocess.run([ADB_PATH, "-s", adb_id, "push", file_path, f"/sdcard/Pictures/QR-code/{file_name}"],
                        check=True)
         print(f"📥 Файл '{file_name}' успешно передан в эмулятор {MEMU_VM_NAME} ({adb_id})")
+        subprocess.run(
+            [ADB_PATH, "-s", adb_id, "shell", "am", "broadcast", "-a",
+             "android.intent.action.MEDIA_SCANNER_SCAN_FILE", "-d", f"file:///sdcard/Pictures/QR-code/{file_name}"
+            ], check=True
+        )
+        print(f"🔄 Запущено сканирование медиафайла '{file_name}'")
     except subprocess.CalledProcessError as e:
-        raise Exception(f"⚠️ Ошибка при передаче файла в эмулятор '{MEMU_VM_NAME}': {e}")
+        raise Exception(f"⚠️ Ошибка при передаче или сканировании файла в эмулятор '{MEMU_VM_NAME}': {e}")
 
     return adb_id
 

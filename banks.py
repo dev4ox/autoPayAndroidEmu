@@ -2,30 +2,44 @@ import time
 import subprocess
 
 # Функции эмуляции нажатия на банковские приложения внутри memu
+# -------------------------   FUNCTION YANDEX BANK    -------------------------------------------------------------
 def yandex_bank(adb_path, adb_id) -> None:
-    # -------------------------   FUNCTION YANDEX BANK    -------------------------------------------------------------
-    # Открытие банковского приложения (название пакета приложения, в
+    # Открытие банковского приложения (название пакета приложения)
     subprocess.run(
         [adb_path, "-s", adb_id, "shell", "monkey", "-p", "com.yandex.bank",
          "-c", "android.intent.category.LAUNCHER", "1"])
-
     time.sleep(5)
+
+    # Закрытия предупреждения о Root
+    subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "550", "750"])
+    time.sleep(1)
 
     # Ввод пароля (координаты, если пароль 1234)
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "135", "900"])
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "360", "900"])
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "135", "1000"])
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "360", "1000"])
+    time.sleep(3)
+
+    # Закрыть всплывающее окно
+    subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "660", "75"])
+    time.sleep(2)
+
+    # Если случайно вошли в профиль
+    subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "50", "70"])
     time.sleep(2)
 
     # Открытие платежей
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "440", "1230"])
+    time.sleep(1)
 
     # Открытие галлереи
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "650", "90"])
+    time.sleep(1)
 
     # Выбор изображения QR-кода
     subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "175", "425"])
+    time.sleep(1)
 
     # Привязка QR-кода
     # subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "175", "425"])
@@ -38,9 +52,9 @@ def yandex_bank(adb_path, adb_id) -> None:
     # -------------------------   FUNCTION YANDEX BANK END    ---------------------------------------------------------
 
 
+# -------------------------   FUNCTION OZON BANK    ---------------------------------------------------------------
 def ozon_bank(adb_path, adb_id) -> None:
-    # -------------------------   FUNCTION OZON BANK    ---------------------------------------------------------------
-    # Открытие банковского приложения (название пакета приложения, в
+    # Открытие банковского приложения (название пакета приложения)
     subprocess.run(
         [adb_path, "-s", adb_id, "shell", "monkey", "-p", "ru.ozon.fintech.finance",
          "-c", "android.intent.category.LAUNCHER", "1"])
@@ -83,20 +97,9 @@ def ozon_bank(adb_path, adb_id) -> None:
     # -------------------------   FUNCTION OZON BANK END    -----------------------------------------------------------
 
 
+# -------------------------   FUNCTION TINKOFF BANK    -----------------------------------------------------------
 def tinkoff_bank(adb_path, adb_id) -> None:
-    # -------------------------   FUNCTION TINKOFF BANK    -----------------------------------------------------------
-    # Открытие приложения галлерея
-    subprocess.run(
-        [adb_path, "-s", adb_id, "shell", "monkey", "-p", "com.android.gallery3d",
-         "-c", "android.intent.category.LAUNCHER", "1"], stdout=subprocess.DEVNULL)
-
-    time.sleep(5)
-    subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "675", "70"])
-    time.sleep(1)
-    subprocess.run([adb_path, "-s", adb_id, "shell", "input", "tap", "500", "285"])
-    time.sleep(2)
-
-    # Открытие банковского приложения (название пакета приложения, в
+    # Открытие банковского приложения (название пакета приложения)
     subprocess.run(
         [adb_path, "-s", adb_id, "shell", "monkey", "-p", "com.idamob.tinkoff.android",
          "-c", "android.intent.category.LAUNCHER", "1"], stdout=subprocess.DEVNULL)
