@@ -46,19 +46,13 @@ def connect_memu(file_path: str, file_name: str) -> str:
     if adb_id not in connected_devices:
         raise Exception(f"⚠️ Эмулятор '{MEMU_VM_NAME}' с ADB ID '{adb_id}' не найден среди подключённых.")
 
-    # Загружаем изображение в эмулятор
     try:
-        subprocess.run([ADB_PATH, "-s", adb_id, "shell", "mkdir", f"/sdcard/Pictures/QR-code"], check=True)
-    except subprocess.CalledProcessError as e:
-        pass
-
-    try:
-        subprocess.run([ADB_PATH, "-s", adb_id, "push", file_path, f"/sdcard/Pictures/QR-code/{file_name}"],
+        subprocess.run([ADB_PATH, "-s", adb_id, "push", file_path, f"/sdcard/Pictures/{file_name}"],
                        check=True)
         print(f"📥 Файл '{file_name}' успешно передан в эмулятор {MEMU_VM_NAME} ({adb_id})")
         subprocess.run(
             [ADB_PATH, "-s", adb_id, "shell", "am", "broadcast", "-a",
-             "android.intent.action.MEDIA_SCANNER_SCAN_FILE", "-d", f"file:///sdcard/Pictures/QR-code/{file_name}"
+             "android.intent.action.MEDIA_SCANNER_SCAN_FILE", "-d", f"file:///sdcard/Pictures/{file_name}"
             ], check=True
         )
         print(f"🔄 Запущено сканирование медиафайла '{file_name}'")
