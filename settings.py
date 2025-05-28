@@ -21,6 +21,8 @@ MEMU_VM_NAME = 'MEmu1'
 
 SAVE_FOLDER = 'qr_codes'
 
+MEMU_FOLDER = '/sdcard/QR-code'
+
 # Должно быть в формате: -100**********
 CHAT_ID = -100
 
