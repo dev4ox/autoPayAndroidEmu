@@ -4,8 +4,6 @@ import cv2
 from pyzbar.pyzbar import decode
 from telegram import Update, Bot
 from telegram.ext import Application, MessageHandler, filters, CallbackContext
-
-import settings
 from settings import *
 from banks import tinkoff_bank, ozon_bank, yandex_bank
 
@@ -44,24 +42,24 @@ def connect_memu(file_path: str, file_name: str) -> str:
     # Проверка, подключён ли этот ADB ID
     connected_devices = get_adb_devices(ADB_PATH)
     print(f"📱 Подключённые ADB-устройства: {connected_devices}")
+
     if adb_id not in connected_devices:
         raise Exception(f"⚠️ Эмулятор '{MEMU_VM_NAME}' с ADB ID '{adb_id}' не найден среди подключённых.")
 
-    # Создаём папку с кодами, если нет
+    # Загружаем изображение в эмулятор
     try:
-        subprocess.run([ADB_PATH, "-s", adb_id, "shell", "mkdir", f"{MEMU_FOLDER}"], check=True)
+        subprocess.run([ADB_PATH, "-s", adb_id, "shell", "mkdir", f"/sdcard/Pictures/QR-code"], check=True)
     except subprocess.CalledProcessError as e:
         pass
 
-    # Загружаем изображение в эмулятор
     try:
-        subprocess.run([ADB_PATH, "-s", adb_id, "push", file_path, f"{MEMU_FOLDER}/{file_name}"],
+        subprocess.run([ADB_PATH, "-s", adb_id, "push", file_path, f"/sdcard/Pictures/QR-code/{file_name}"],
                        check=True)
         print(f"📥 Файл '{file_name}' успешно передан в эмулятор {MEMU_VM_NAME} ({adb_id})")
         subprocess.run(
             [ADB_PATH, "-s", adb_id, "shell", "am", "broadcast", "-a",
-             "android.intent.action.MEDIA_SCANNER_SCAN_FILE", "-d", f"file://{MEMU_FOLDER}/{file_name}"
-             ], check=True
+             "android.intent.action.MEDIA_SCANNER_SCAN_FILE", "-d", f"file:///sdcard/Pictures/QR-code/{file_name}"
+            ], check=True
         )
         print(f"🔄 Запущено сканирование медиафайла '{file_name}'")
     except subprocess.CalledProcessError as e:
